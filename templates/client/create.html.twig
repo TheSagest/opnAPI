@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RegistrationController!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 ml-md-auto">
+                <div class="card bg-light mb-3 mt-5" >
+                    <div class="card-body">
+                        <div class="card-header mb-3">NEW Client Form</div>
+                        {% if app.user != null %}
+                            {{ form_start(form) }}
+                            <div class="form_group">
+                                <div class="col-md-12 mb-3">
+                                    {{ form_row(form.clientName, {'attr': {'class': 'form-control'}}) }}
+                                    <div class="form-group row  ">
+                                        <div class="col-md-4">
+                                            {{ form_row(form.ipAddress, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form_row(form.scanForUp, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form_row(form.port, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form_row(form.https, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form_row(form.localNetworkAliasName, {'attr': {'class': 'form-control', 'placeholder': 'network_AllowAll_INT'}}) }}
+                                        </div>
+                                    </div>
+                                    {{ form_row(form.localIP, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_row(form.apiKey, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_row(form.apiSecret, {'attr': {'class': 'form-control'}}) }}
+				                    {{ form_row(form.notes, {'attr': {'class': 'form-control'}}) }}
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-8 " style="margin-top:5px;">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-btn fa-user"></i> Create
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form_group col-md-12 mb-3">
+                                <a class="btn btn-primary" href="{{ path('list_clients') }}" role="button">Back</a>
+                            </div>
+                            {{ form_end(form) }}
+
+                        {% endif %}
+                        {% if app.user == null %}
+                            <a href="{{ path('app_login') }}" class="btn btn-info">Please Login</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

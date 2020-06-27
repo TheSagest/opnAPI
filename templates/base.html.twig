@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+
+    {% block stylesheets %}{% endblock %}
+
+</head>
+<body onload="pageLoaded()">
+<nav
+        class="navbar navbar-expand-lg navbar-light bg-light"
+        style="height: 70px;"
+>
+    <a class="navbar-brand" href="#">Symfony</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
+    <ul class="nav navbar-nav navbar-right">
+        {% if app.user %}
+            <li><a class="nav-link" href="{{ path('registration') }}">NEW</a></li>
+            <li><a class="nav-link" href="{{ path('change_pass') }}">Password</a></li>
+            <li><a class="nav-link" href="{{ path('list_clients') }}">Clients</a></li>
+            <li><a class="nav-link" href="{{ path('app_logout') }}">Logout</a></li>
+        {% else %}
+            <li><a class="nav-link" href="{{ path('app_login') }}">Login</a></li>
+
+        {% endif %}
+    </ul>
+
+</nav>
+
+
+
+{% block body %}{% endblock %} {% block javascripts %}{% endblock %}
+</body>
 </html>

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create IP!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 ml-md-auto">
+                <div class="card bg-light mb-3 mt-5" style="width: 800px">
+                    <div class="card-body">
+                        <div class="card-header mb-3">EDIT IP list for {{ IPList.client.clientName }}</div>
+                        {% if app.user != null %}
+                            {{ form_start(form) }}
+                            <div class="form_group">
+                                <div class="col-md-12 mb-3">
+                                    {{ form_row(form.listType, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_row(form.IPList, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_row(form.notes, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-8 col-md-offset-4" style="margin-top:5px;">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-btn fa-user"></i>Update
+                                    </button>
+
+
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+			 <div class="form_group col-md-12 mb-3">
+                            <a class="btn btn-primary" href="{{ path('list_clients') }}" role="button">Back</a>
+                         </div>
+                        {% endif %}
+                        {% if app.user == null %}
+                            <a href="{{ path('app_login') }}" class="btn btn-info">Please Login</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

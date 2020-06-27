@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client List{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .myLink:hover {
+            color: red;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-10 ml-md-auto">
+                <div class="card bg-light mb-3 mt-5" style="width: 1200px">
+                    <div class="card-body">
+
+                        {# pass an array argument to get the messages of those types  #}
+                        {% for label, messages in app.flashes([]) %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ label }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+
+                        <div class="card-header">
+                            <h1>Client List and Actions
+                                <div id="spinner" class="spinner-border text-center  text-primary" style="width: 6rem; height: 6rem; "></div>
+                            </h1>
+                        </div>
+
+
+
+                        {% if app.user != null %}
+                            <table class="table">
+                                <tr>
+                                    <th>Client Name.</th>
+                                    <th>API </br>URLs.</th>
+                                    <th>IP / Hostname</th>
+                                    <th>Versions.</th>
+                                    <th>Firewall<br>Status</th>
+                                    <th>Refresh<br>Status</th>
+                                    <th>Download<br>Firmware</th>
+                                    <th>Notes</th>
+                                </tr>
+
+                                {% for client in clients %}
+
+                                        <tr>
+                                            <td><a href=" {{ url('edit_client', { 'client': client.id}) }}" title='Edit Client Details'>{{ client.getClientName }}</a></td>
+                                            <td><a href=" {{ url('list_client_ips', { 'client': client.id}) }}" title='IP address lists. '><span class="glyphicon glyphicon-link myLink"></span></a></td>
+                                            <td>{{ client.localIP }}</td>
+                                            <td>
+                                                {% if client.firewallOn == 'n/a' %}
+                                                    -
+                                                {% else %}
+                                                        <a   href=" {{ url('refresh_firmware_version', { 'clientID': client.id}) }} " title='Refresh Version.'  }}><span onclick="spinnerON()" >{{ client.productVersion }}</span> </a>
+
+                                                {% endif%}
+                                            </td>
+                                            {% if client.firewallOn == 'On' %}
+                                                <td><a href=" {{ url('toggle_firewall', { 'client': client.id}) }}" class="btn btn-success btn-sm" role="button" title='Turn Firewall OFF.'>On</a></td>
+                                            {% elseif client.firewallOn == 'Off' %}
+                                                <td><a href=" {{ url('toggle_firewall', { 'client': client.id}) }}" class="btn btn-danger btn-sm" role="button" title='Turn Firewall ON.'>Off</a></td>
+
+                                            {% else   %}
+                                                <td><span class="btn btn-secondary btn-sm" role="button" disabled>{{ client.firewallOn }}</span></td>
+
+                                            {% endif %}
+
+                                            {% if client.firewallOn == 'n/a' %}
+                                                <td>-</td>
+                                            {% else   %}
+                                                <td><a   href=" {{ url('refresh_alias_status', { 'clientID': client.id}) }} " title='Refresh Firewall Status.'  }}><span onclick="spinnerON()" class ="glyphicon glyphicon-refresh myLink"  ></span> </a></td>
+                                            {% endif%}
+
+                                            {% if client.firewallOn == 'n/a' %}
+                                                <td>
+                                                    <span class="glyphicon glyphicon-minus" style="color:grey"></span>
+                                                    <span class="glyphicon glyphicon-minus" style="color:grey"></span>
+                                                </td>
+                                            {% else %}
+                                                <td><a href=" {{ url('download_firmware', { 'client': client.id}) }}" title='Download Firmware'><span class="glyphicon glyphicon-download myLink"></span></a>
+
+                                                    <a href=" {{ url('save_firmware', { 'client': client.id}) }}" title='Save Firmware'><span class="glyphicon glyphicon-download-alt myLink"></span></a>
+                                                </td>
+                                            {% endif %}
+
+                                            <td>{{ client.notes }}</td>
+                                        </tr>
+
+                                {%  endfor %}
+                            </table>
+
+                            <div class="card-header">
+                                <a href="{{ path('create_client') }}" >NEW Client</a>
+                            </div>
+                        {% endif %}
+
+                        {% if app.user == null %}
+                            <a href="{{ path('app_login') }}" class="btn btn-info">Please login </a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        {# Confirmation of delete #}
+        function confirmDelete(id) {
+            var txt;
+
+            var message =       "#################\n"
+            message = message + "\n";
+            message = message + "##     WARNING       ##\n";
+            message = message + "\n";
+            message = message + "#################\n\n"
+            message = message + "REALLY Delete?";
+            message = message + "\n";
+
+
+            var r = confirm(message);
+            if (r === true) {
+                txt = "http://192.168.12.190/deleteClient/"+ id ;
+                window.location.href = txt;
+            }
+            {# Do nothing #}
+        }
+    </script>
+
+    <script>
+
+        function spinnerON(){
+            console.log("On");
+            document.getElementById("spinner").style.visibility = "visible";
+            document.body.style.cursor = "wait";
+        }
+
+        function spinnerOff(){
+            console.log("Off");
+            document.getElementById("spinner").style.visibility = "hidden";
+            document.body.style.cursor = "default";
+        }
+
+        function pageLoaded() {
+            spinnerOff();
+        }
+
+    </script>
+
+{% endblock %}

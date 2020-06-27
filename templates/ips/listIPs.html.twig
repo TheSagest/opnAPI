@@ -1,0 +1,106 @@
+
+{% extends 'base.html.twig' %}
+
+{%  block stylesheets %}
+    <style>
+        input[type=text] {
+            width: 100%;
+            padding: 1px 1px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            font-size: 12px;
+        }
+    </style>
+{%  endblock %}
+
+
+{% block title %}Client IP List{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-light mb-3 mt-5" >
+                    <div class="card-body">
+
+			{# pass an array argument to get the messages of those types  #}
+                        {% for label, messages in app.flashes([]) %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ label }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}                        
+
+			{% if app.user != null %}
+                            <div>
+                                <h1>{{ client.clientName }}</h1>
+                            </div>
+                            <table class="table">
+                                <tr>
+                                    <th>List Name.</th>
+                                    <th>IP Addresses.</th>
+                                    <th>Edit.</th>
+                                    <th>Delete.</th>
+                                    <th>OPNsense URL.</th>
+                                    <th>Test</th>
+                                </tr>
+
+                                {%  for ips in client.iPLists %}
+
+                                    <tr>
+                                        <td>{{ ips.ListType }} </td>
+                                        <td>{{ ips.IPList|nl2br }}</td>
+                                        <td><a href=" {{ url('edit_client_ip', { 'IPList': ips.id }) }}">Edit</a></td>
+                                        <td><a href=" {{ url('delete_client_ip', { 'IPList': ips.id }) }}">Delete</a></td>
+                                        <td><input type="text" { font-size: 12px; } size = '85' value="https://api.sagelink.com.au/api/{{ client.id }}/{{ ips.ListType }}" id="myInput{{ loop.index}} " ></td>
+                                        <td><a class="btn btn-primary" href="https://api.sagelink.com.au/api/{{ client.id }}/{{ ips.ListType }}" target="_blank">Test</a></td>
+                                    </tr>
+
+                                {%  endfor %}
+                            </table>
+                                <h4>Global</h4>
+                            <table class="table">
+                                <tr>
+                                    <th>List Name.</th>
+                                    <th>IP Addresses.</th>
+                                    <th>Edit.</th>
+                                    <th>Delete.</th>
+                                    <th>OPNsense URL.</th>
+                                    <th>Test</th>
+                                </tr>
+                                {%  for ips in global.iPLists %}
+
+                                    <tr>
+                                        <td>{{ ips.ListType }} </td>
+                                        <td>{{ ips.IPList|nl2br }}</td>
+                                        <td><a href=" {{ url('edit_client_ip', { 'IPList': ips.id }) }}">Edit</a></td>
+                                        <td><a href=" {{ url('delete_client_ip', { 'IPList': ips.id }) }}">Delete</a></td>
+                                        <td><input type="text" { font-size: 12px; } size = '85' value="https://api.sagelink.com.au/api/{{ global.id }}/{{ ips.ListType }}" id="myInput{{ loop.index}} " ></td>
+                                        <td><a class="btn btn-primary" href="https://api.sagelink.com.au/api/{{ global.id }}/{{ ips.ListType }}" target="_blank">Test</a></td>
+                                    </tr>
+
+                                {%  endfor %}
+
+                            </table>
+
+                            <div class="form_group col-md-12 mb-3">
+                                <a class="btn btn-primary" href="{{ path('create_client_ip', { 'client': client.id}) }}" role="button">Create New</a>
+                            </div>
+
+                            <div class="form_group col-md-12 mb-3">
+                                <a class="btn btn-primary" href="{{ path('list_clients') }}" role="button">Back</a>
+                            </div>
+                        {% endif %}
+
+                        {% if app.user == null %}
+                            <a href="{{ path('app_login') }}" class="btn btn-info">Please Login</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
