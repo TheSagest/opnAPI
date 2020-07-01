@@ -23,7 +23,7 @@ class ClientType extends AbstractType
             ->add('scanForUp')
             ->add( 'localNetworkAliasName', TextType::class,[
                 'empty_data'  => "network_AllowAll_INT",
-                    'required' => false
+                 'required' => false
                 ])
             ->add('port', IntegerType::class, [
                 'required' => false

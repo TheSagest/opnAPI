@@ -1,0 +1,8 @@
+{% for client in block.clients %}
+    {{ client.getClientName }}
+
+    <a href = "{{ block.editClientLink(client) }}" >{{  client.getClientName}} </a>
+    <br>
+
+{% endfor %}
+

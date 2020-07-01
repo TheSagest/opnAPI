@@ -46,15 +46,15 @@
                                     <th>Test</th>
                                 </tr>
 
-                                {%  for ips in client.iPLists %}
+                                {%  for ips in client.clientApiUrls %}
 
                                     <tr>
-                                        <td>{{ ips.ListType }} </td>
-                                        <td>{{ ips.IPList|nl2br }}</td>
+                                        <td>{{ ips.uRLName }} </td>
+                                        <td>{{ ips.ipAddressList|nl2br }}</td>
                                         <td><a href=" {{ url('edit_client_ip', { 'IPList': ips.id }) }}">Edit</a></td>
                                         <td><a href=" {{ url('delete_client_ip', { 'IPList': ips.id }) }}">Delete</a></td>
-                                        <td><input type="text" { font-size: 12px; } size = '85' value="https://api.sagelink.com.au/api/{{ client.id }}/{{ ips.ListType }}" id="myInput{{ loop.index}} " ></td>
-                                        <td><a class="btn btn-primary" href="https://api.sagelink.com.au/api/{{ client.id }}/{{ ips.ListType }}" target="_blank">Test</a></td>
+                                        <td><input type="text" { font-size: 12px; } size = '85' value="https://api.sagelink.com.au/api/{{ client.id }}/{{ ips.id }}" id="myInput{{ loop.index}} " ></td>
+                                        <td><a class="btn btn-primary" href="https://localhost/api/{{ client.id }}/{{ ips.id }}" target="_blank">Test</a></td>
                                     </tr>
 
                                 {%  endfor %}
@@ -69,18 +69,18 @@
                                     <th>OPNsense URL.</th>
                                     <th>Test</th>
                                 </tr>
-                                {%  for ips in global.iPLists %}
+{#                                {%  for ips in global.iPLists %}#}
 
-                                    <tr>
-                                        <td>{{ ips.ListType }} </td>
-                                        <td>{{ ips.IPList|nl2br }}</td>
-                                        <td><a href=" {{ url('edit_client_ip', { 'IPList': ips.id }) }}">Edit</a></td>
-                                        <td><a href=" {{ url('delete_client_ip', { 'IPList': ips.id }) }}">Delete</a></td>
-                                        <td><input type="text" { font-size: 12px; } size = '85' value="https://api.sagelink.com.au/api/{{ global.id }}/{{ ips.ListType }}" id="myInput{{ loop.index}} " ></td>
-                                        <td><a class="btn btn-primary" href="https://api.sagelink.com.au/api/{{ global.id }}/{{ ips.ListType }}" target="_blank">Test</a></td>
-                                    </tr>
+{#                                    <tr>#}
+{#                                        <td>{{ ips.ListType }} </td>#}
+{#                                        <td>{{ ips.IPList|nl2br }}</td>#}
+{#                                        <td><a href=" {{ url('edit_client_ip', { 'IPList': ips.id }) }}">Edit</a></td>#}
+{#                                        <td><a href=" {{ url('delete_client_ip', { 'IPList': ips.id }) }}">Delete</a></td>#}
+{#                                        <td><input type="text" { font-size: 12px; } size = '85' value="https://api.sagelink.com.au/api/{{ global.id }}/{{ ips.ListType }}" id="myInput{{ loop.index}} " ></td>#}
+{#                                        <td><a class="btn btn-primary" href="https://api.sagelink.com.au/api/{{ global.id }}/{{ ips.ListType }}" target="_blank">Test</a></td>#}
+{#                                    </tr>#}
 
-                                {%  endfor %}
+{#                                {%  endfor %}#}
 
                             </table>
 

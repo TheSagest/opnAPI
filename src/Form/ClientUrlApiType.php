@@ -2,31 +2,34 @@
 
 namespace App\Form;
 
-use App\Entity\IPList;
+use App\Entity\ClientApiUrl;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class IPsType extends AbstractType
+class ClientUrlApiType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 	    $builder
-		->add('listType', TextType::class,[
+		->add('URLName', TextType::class,[
 		    'label'  => 'List Name.',
 		])
-		->add('IPList',TextareaType::class,[
+		->add('IpAddressList',TextareaType::class,[
 		    'label'  => 'IP List.',
+            'required' => false
 		])
-		->add('notes',TextareaType::class);
+		->add('Notes',TextareaType::class, [
+            'required' => false
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => IPList::class,
+            'data_class' => ClientApiUrl::class,
         ]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 namespace App\Command;
-use App\Service\OpnSenseFirmwareAPI;
+
 use App\Service\OpnSenseStatusService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

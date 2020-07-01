@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Client;
-use App\Entity\IPList;
-use App\Form\IPsType;
+use App\Entity\ClientApiUrl;
+use App\Form\ClientUrlApiType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,11 +29,10 @@ class ClientIPsController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $global = $this->getDoctrine()->getRepository(Client::class)->findBy(['clientName' => '_globalBlock']);
+
 
         return $this->render('ips/listIPs.html.twig', [
             'client' => $client,
-            'global' => $global[0],
         ]);
     }
 
@@ -45,26 +44,27 @@ class ClientIPsController extends AbstractController
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $ipList = new IPList();
+        $clientIpList = new ClientApiUrl();
+        $clientIpList->setClient($client);
 
-        $form = $this->createForm(IPsType::class, $ipList);
+        $form = $this->createForm(ClientUrlApiType::class, $clientIpList);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             // Save
-            $ipList->setClient($client);
             $em = $this->getDoctrine()->getManager();
-            $em->persist($ipList);
+            $em->persist($clientIpList);
             $em->flush();
 
-            return $this->redirectToRoute('list_client_ips', ['client' => $client->getId()]);
+            return $this->redirectToRoute('list_clients');
         }
-
         return $this->render('ips/create.html.twig', [
             'form' => $form->createView(),
         ]);
+
+
     }
 
     /**
@@ -94,7 +94,7 @@ class ClientIPsController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
 
-        $form = $this->createForm(IPsType::class, $IPList);
+        $form = $this->createForm(ClientUrlApiType::class, $IPList);
 
         $form->handleRequest($request);
 

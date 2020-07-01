@@ -6,7 +6,7 @@ use App\Entity\Client;
 use App\Form\ClientType;
 
 use App\Module\RemoteAPI\FirewallAlias;
-use App\Service\OpnSenseFirmwareAPI;
+use App\Service\OpnSenseFWStatusAPI;
 use App\Service\OpnSenseStatusService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +25,7 @@ class ClientController extends AbstractController
     private $OStatusService;
 
     public function __construct(EntityManagerInterface $entityManager,
-                                OpnSenseFirmwareAPI $sense,
+                                OpnSenseFWStatusAPI $sense,
                                 FirewallAlias $firewallAlias,
                                 OpnSenseStatusService $OStatusService
 
@@ -57,6 +57,10 @@ class ClientController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($client);
             $em->flush();
+
+//            Update the Firmware and Alias details
+            $this->OStatusService->persistFirmwareData($client);
+            $this->OStatusService->persistAliasStatus($client);
 
             return $this->redirectToRoute('list_clients');
         }

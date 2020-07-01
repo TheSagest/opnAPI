@@ -5,74 +5,67 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\Firmware;
+use App\Service\Client\ClientQueryLogService ;
 use App\Service\IPListService;
 use App\Service\OpnSenseStatusService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
 class RequestController extends AbstractController
 {
-    private $IPListService;
+
     private $OpnSenseStatusService;
     private $em;
+    private $queryLog;
+    private $request;
 
-    public function __construct(IPListService $IPlist,
-                                OpnSenseStatusService $OpnSenseStatusService,
-                                EntityManagerInterface $em)
+    public function __construct(OpnSenseStatusService $OpnSenseStatusService,
+                                EntityManagerInterface $em,
+                                ClientQueryLogService $queryLog,
+                                RequestStack $request
+    )
     {
-        $this->IPListService = $IPlist;
+
         $this->OpnSenseStatusService = $OpnSenseStatusService;
         $this->em = $em;
+        $this->queryLog = $queryLog;
+        $this->request = $request->getCurrentRequest();
+
     }
 
     /**
-     * @Route("/api/{client}/{listType}", name="api_request")
-     * @param Client $client
-     * @param string $listType
+     * @Route("/api/{IPList}", name="api_request")
      * @return Response
      */
-    public function api(Client $client,  string $listType)
+    public function api()
     {
         // Generate response
         $response = new Response();
-
-        $ipList = $this->IPListService->getIPsByListType($client, $listType);
-        if(!$ipList){
-            // return new RedirectResponse();
-            $response->headers->set('Cache-Control', 'private');
-            $response->headers->set('Content-type', 'text/plain' );
-            $response->headers->set('Content-Disposition', 'attachment; filename="file.txt";');
-            $response->headers->set('Content-length',  0);
-            $response->setcontent( "" );
-            return $response;
-        }
-
 
 
         // Create the TEMP File
         $file = fopen('php://memory', 'rw+');
 
         fputs( $file , "; Created by Sage Link monitor API on " .date('d-m-Y-Hi'). "  \r");
-        fputs( $file , $ipList->getIPlist() );
+        fputs( $file , 'hello' );
 
         rewind($file);
         $content = stream_get_contents($file);
-// Set headers
+
+        // Set headers
         $response->headers->set('Cache-Control', 'private');
         $response->headers->set('Content-type', 'text/plain' );
         $response->headers->set('Content-Disposition', 'attachment; filename="file.txt";');
         $response->headers->set('Content-length',  strlen($content));
 
-// Send headers before outputting anything
-//        $response-> sendHeaders();
-
         $response->setcontent( $content );
 
         return $response;
+
     }
 
     /**
