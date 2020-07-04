@@ -4,34 +4,27 @@ namespace App\Controller;
 
 
 use App\Entity\Client;
+use App\Entity\ClientApiUrl;
 use App\Entity\Firmware;
-use App\Entity\IPList;
-use App\Service\Client\ClientQueryLogService ;
-use App\Service\IPListService;
-use App\Service\OpnSenseStatusService;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-class RequestController extends AbstractController
+class RequestController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
-    private $IPListService;
+
     private $OpnSenseStatusService;
     private $em;
     private $queryLog;
     private $request;
 
-    public function __construct(IPListService $IPlist,
-                                OpnSenseStatusService $OpnSenseStatusService,
-                                EntityManagerInterface $em,
-                                ClientQueryLogService $queryLog,
-                                RequestStack $request
+    public function __construct(\App\Service\OpnSenseStatusService $OpnSenseStatusService,
+                                \Doctrine\ORM\EntityManagerInterface  $em,
+                                \App\Service\Client\ClientQueryLogService $queryLog,
+                                \Symfony\Component\HttpFoundation\RequestStack $request
     )
     {
-        $this->IPListService = $IPlist;
+
         $this->OpnSenseStatusService = $OpnSenseStatusService;
         $this->em = $em;
         $this->queryLog = $queryLog;
@@ -40,13 +33,20 @@ class RequestController extends AbstractController
     }
 
     /**
-     * @Route("/api/{IPList}", name="api_request")
+     * @Route("/api/{clientApiUrl}", name="api_request")
      * @return Response
      */
-    public function api(IPList $IPList)
+    public function api(ClientApiUrl $clientApiUrl)
     {
         // Generate response
         $response = new Response();
+
+//        Get the Client API list
+        $ipList = $this->getDoctrine()->getManager()->getRepository(ClientApiUrl::class)->findOneBy(['id' => $clientApiUrl->getId()]);
+
+        if (!$ipList){
+            $ipList = "";
+        }
 
 
         // Create the TEMP File
@@ -54,6 +54,7 @@ class RequestController extends AbstractController
 
         fputs( $file , "; Created by Sage Link monitor API on " .date('d-m-Y-Hi'). "  \r");
         fputs( $file , 'hello' );
+        fputs($file, $ipList->getIpAddressList());
 
         rewind($file);
         $content = stream_get_contents($file);

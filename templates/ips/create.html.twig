@@ -8,14 +8,14 @@
             <div class="col-md-10 ml-md-auto">
                 <div class="card bg-light mb-3 mt-5" style="width: 800px">
                     <div class="card-body">
-                        <div class="card-header mb-3">NEW IP for Client Form</div>
+                        <div class="card-header mb-3">NEW API IP address for {{ client.getClientName }}</div>
                         {% if app.user != null %}
                             {{ form_start(form) }}
                             <div class="form_group">
                                 <div class="col-md-12 mb-3">
-                                    {{ form_row(form.listType, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_row(form.IPList, {'attr': {'class': 'form-control'}}) }}
-				    {{ form_row(form.notes, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_row(form.URLName, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_row(form.IpAddressList, {'attr': {'class': 'form-control'}}) }}
+				                    {{ form_row(form.Notes, {'attr': {'class': 'form-control'}}) }}
                                 </div>
                             </div>
 

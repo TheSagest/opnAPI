@@ -14,22 +14,9 @@ use Symfony\Component\Security\Core\Event\AuthenticationEvent;
  */
 class AuthenticationSubscriber implements EventSubscriberInterface
 {
-
-
-    /**
-     * @var LoggerInterface
-     */
     private $logger;
-
-    /**
-     * @var RequestStack
-     */
     private $request;
 
-    /**
-     * @param LoggerInterface $logger
-     * @param RequestStack $request
-     */
     public function __construct(LoggerInterface $logger, RequestStack $request)
     {
         $this->logger = $logger;
@@ -41,8 +28,13 @@ class AuthenticationSubscriber implements EventSubscriberInterface
      */
     public function onAuthenticationFailure(AuthenticationEvent $authenticationEvent)
     {
+        if ($authenticationEvent->getAuthenticationToken()->getUsername() === 'anon.')
+        {
+            return;
+        }
+
         $ipAddress = $this->request->getCurrentRequest()->getClientIp();
-        dd($authenticationEvent->getAuthenticationToken(),$ipAddress);
+//        dd($authenticationEvent->getAuthenticationToken(),$ipAddress);
 
         $this->logger->error('Authentication failed for IP: ' . $ipAddress);
     }
@@ -50,7 +42,8 @@ class AuthenticationSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            AuthenticationEvent::class => 'onAuthenticationFailure',
+            //AuthenticationEvent::class => 'onAuthenticationFailure',
+            AuthenticationEvents::AUTHENTICATION_FAILURE => 'onAuthenticationFailure'
         ];
     }
 }

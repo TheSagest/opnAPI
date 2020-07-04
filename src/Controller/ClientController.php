@@ -58,6 +58,10 @@ class ClientController extends AbstractController
             $em->persist($client);
             $em->flush();
 
+//            Update the Firmware and Alias details
+            $this->OStatusService->persistFirmwareData($client);
+            $this->OStatusService->persistAliasStatus($client);
+
             return $this->redirectToRoute('list_clients');
         }
 

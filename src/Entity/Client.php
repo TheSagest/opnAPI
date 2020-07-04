@@ -6,7 +6,7 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
+
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
@@ -18,12 +18,9 @@ class Client
     }
 
     /**
-     * @var \Ramsey\Uuid\UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * @ORM\Id()
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid")
      */
     private $id;
 
@@ -32,13 +29,7 @@ class Client
      */
     private $clientName;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity=IPList::class, mappedBy="client")
-     */
-    private $iPLists;
-
-    /**
+/**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $ipAddress;
@@ -242,12 +233,17 @@ class Client
      */
     private $localIP;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ClientApiUrl::class, mappedBy="Client", orphanRemoval=true)
+     */
+    private $clientApiUrls;
+
 
 
     public function __construct()
     {
-        $this->iPLists = new ArrayCollection();
         $this->firmware = new ArrayCollection();
+        $this->clientApiUrls = new ArrayCollection();
     }
 
     public function getId()
@@ -263,37 +259,6 @@ class Client
     public function setClientName(string $clientName): self
     {
         $this->clientName = $clientName;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|IPList[]
-     */
-    public function getIPLists(): Collection
-    {
-        return $this->iPLists;
-    }
-
-    public function addIPList(IPList $iPList): self
-    {
-        if (!$this->iPLists->contains($iPList)) {
-            $this->iPLists[] = $iPList;
-            $iPList->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIPList(IPList $iPList): self
-    {
-        if ($this->iPLists->contains($iPList)) {
-            $this->iPLists->removeElement($iPList);
-            // set the owning side to null (unless already changed)
-            if ($iPList->getClient() === $this) {
-                $iPList->setClient(null);
-            }
-        }
 
         return $this;
     }
@@ -349,6 +314,37 @@ class Client
     public function setLocalIP(string $localIP): self
     {
         $this->localIP = $localIP;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ClientApiUrl[]
+     */
+    public function getClientApiUrls(): Collection
+    {
+        return $this->clientApiUrls;
+    }
+
+    public function addClientApiUrl(ClientApiUrl $clientApiUrl): self
+    {
+        if (!$this->clientApiUrls->contains($clientApiUrl)) {
+            $this->clientApiUrls[] = $clientApiUrl;
+            $clientApiUrl->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientApiUrl(ClientApiUrl $clientApiUrl): self
+    {
+        if ($this->clientApiUrls->contains($clientApiUrl)) {
+            $this->clientApiUrls->removeElement($clientApiUrl);
+            // set the owning side to null (unless already changed)
+            if ($clientApiUrl->getClient() === $this) {
+                $clientApiUrl->setClient(null);
+            }
+        }
 
         return $this;
     }

@@ -12,11 +12,7 @@ class MainPage extends AbstractBlock
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired([
-//            'clients'
         ]);
     }
-
-
-
 
 }

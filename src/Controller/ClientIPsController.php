@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Client;
-use App\Entity\IPList;
-use App\Form\IPsType;
+use App\Entity\ClientApiUrl;
+use App\Form\ClientUrlApiType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,11 +29,10 @@ class ClientIPsController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $global = $this->getDoctrine()->getRepository(Client::class)->findBy(['clientName' => '_globalBlock']);
+
 
         return $this->render('ips/listIPs.html.twig', [
             'client' => $client,
-            'global' => $global[0],
         ]);
     }
 
@@ -45,56 +44,61 @@ class ClientIPsController extends AbstractController
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $ipList = new IPList();
+        $clientIpList = new ClientApiUrl();
+        $clientIpList->setClient($client);
 
-        $form = $this->createForm(IPsType::class, $ipList);
+        $form = $this->createForm(ClientUrlApiType::class, $clientIpList);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             // Save
-            $ipList->setClient($client);
             $em = $this->getDoctrine()->getManager();
-            $em->persist($ipList);
+            $em->persist($clientIpList);
             $em->flush();
 
-            return $this->redirectToRoute('list_client_ips', ['client' => $client->getId()]);
+            return $this->redirectToRoute('list_client_ips',
+                [
+                    'client' => $client->getId()
+                ]);
         }
-
         return $this->render('ips/create.html.twig', [
             'form' => $form->createView(),
+            'client' => $client,
         ]);
+
+
     }
 
     /**
-     * @Route("/deleteClientIP/{IPList}", name="delete_client_ip")
+     * @Route("/deleteClientIP/{clientApiUrl}", name="delete_client_ip")
      */
-    public function deleteClientIP(IPList $IPList )
+    public function deleteClientIP(ClientApiUrl $clientApiUrl )
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $em = $this->getDoctrine()->getManager();
 
-        $em->remove($IPList);
+        $em->remove($clientApiUrl);
         $em->flush();
 
-        $this->addFlash('info', 'deleted '.$IPList->getIPlist() . ' from ' . $IPList->getClient()->getClientName() );
+        $this->addFlash('info', 'deleted '.$clientApiUrl->getURLName() . ' from ' . $clientApiUrl->getClient()->getClientName() );
 
-        return $this->redirectToRoute('list_client_ips', ['client' => $IPList->getClient()->getId()]);
+        return $this->redirectToRoute('list_client_ips', ['client' => $clientApiUrl->getClient()->getId()]);
 
     }
 
     /**
-     * @Route("/editClientIP/{IPList}", name="edit_client_ip")
+     * @Route("/editClientIP/{clientApiUrl}", name="edit_client_ip")
      */
-    public function editClient(IPList $IPList, Request $request)
+    public function editClient(ClientApiUrl $clientApiUrl, Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $em = $this->getDoctrine()->getManager();
 
-        $form = $this->createForm(IPsType::class, $IPList);
+        $form = $this->createForm(ClientUrlApiType::class, $clientApiUrl);
 
         $form->handleRequest($request);
 
@@ -104,12 +108,12 @@ class ClientIPsController extends AbstractController
             $IPList = $form->getData();
             $em->flush();
 
-            return $this->redirectToRoute('list_client_ips', ['client' => $IPList->getClient()->getId()]);
+            return $this->redirectToRoute('list_client_ips', ['client' => $clientApiUrl->getClient()->getId()]);
             }
 
         return $this->render('ips/edit.html.twig', [
             'form' => $form->createView(),
-            'IPList' => $IPList ,
+            'clientApiUrl' => $clientApiUrl ,
         ]);
     }
 
