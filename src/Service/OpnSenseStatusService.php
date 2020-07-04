@@ -18,10 +18,10 @@ class OpnSenseStatusService
 
 
     public function __construct(ClientRepository $clients,
-                                OpnSenseFirmwareAPI $firmware,
+                                OpnSenseFWStatusAPI $firmware,
                                 FirewallAlias $firewallAlias,
                                 EntityManagerInterface $em
-)
+    )
     {
         $this->clients = $clients;
         $this->opnStatus = $firmware;
@@ -35,7 +35,7 @@ class OpnSenseStatusService
         $clients = $this->clients->scanClients();
 
         foreach ($clients as $client){
-            dump($client->getClientName() );
+//            dump($client->getClientName() );
             $this->persistFirmwareData($client);
             $this->persistAliasStatus($client);
 
@@ -44,7 +44,7 @@ class OpnSenseStatusService
 
     public function persistFirmwareData(Client $client){
 
-         $this->setFirmwareHeaders($client);
+        $this->setFirmwareHeaders($client);
 
 
         $firmwareStatusResponse = $this->opnStatus->firmware()->status();

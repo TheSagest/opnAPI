@@ -12,8 +12,8 @@ class IPList
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid")
      */
     private $id;
 
@@ -23,7 +23,7 @@ class IPList
     private $listType;
 
     /**
-     * @ORM\Column(type="text", length=65535)
+     * @ORM\Column(type="string", length=65535)
      */
     private $IPlist;
 

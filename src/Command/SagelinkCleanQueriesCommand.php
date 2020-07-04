@@ -1,34 +1,34 @@
 <?php
 namespace App\Command;
 
-use App\Service\OpnSenseStatusService;
+use App\Service\CleanClientQueryService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
-class SagelinkUpdateFirmwareVsCommand extends Command
+class SagelinkCleanQueriesCommand extends Command
 {
-    private $opnStatus;
+    private $cleanUp;
 
-    public function __construct(OpnSenseStatusService $opnSense
+    public function __construct(CleanClientQueryService $cleanUp
     )
     {
         parent::__construct();
-        $this->opnStatus = $opnSense;
+        $this->cleanUp = $cleanUp;
 
     }
 
     protected function configure(): void
     {
-        $this->setName('sagelink:firmware:update');
+        $this->setName('sagelink:cleanup:queries');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Writing Data');
-        $this->opnStatus->updateFirmwareVersion();
-        $output->writeln('Finished');
+        $output->writeln('Start Clean');
+        $this->cleanUp->CleanQueries();
+        $output->writeln('Finished Clean');
 
         return 0;
     }

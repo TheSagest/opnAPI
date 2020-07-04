@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-class OpnSenseFirmwareAPI
+class OpnSenseFWStatusAPI
 {
     private $firmware;
     private $diagnosticsActivity;

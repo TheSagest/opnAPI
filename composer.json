@@ -4,6 +4,7 @@
     "require": {
         "php": "^7.2.5",
         "ext-ctype": "*",
+        "ext-curl": "*",
         "ext-iconv": "*",
         "guzzlehttp/guzzle": "^6.5",
         "ramsey/uuid-doctrine": "^1.6",

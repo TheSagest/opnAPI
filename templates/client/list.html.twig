@@ -47,12 +47,13 @@
                                     <th>Firewall<br>Status</th>
                                     <th>Refresh<br>Status</th>
                                     <th>Download<br>Firmware</th>
+                                    <th>Up</th>
                                     <th>Notes</th>
                                 </tr>
 
                                 {% for client in clients %}
 
-                                        <tr>
+                                        <tr id = "hostRow{{ client.id }}">
                                             <td><a href=" {{ url('edit_client', { 'client': client.id}) }}" title='Edit Client Details'>{{ client.getClientName }}</a></td>
                                             <td><a href=" {{ url('list_client_ips', { 'client': client.id}) }}" title='IP address lists. '><span class="glyphicon glyphicon-link myLink"></span></a></td>
                                             <td>{{ client.localIP }}</td>
@@ -84,13 +85,17 @@
                                                 <td>
                                                     <span class="glyphicon glyphicon-minus" style="color:grey"></span>
                                                     <span class="glyphicon glyphicon-minus" style="color:grey"></span>
+                                                    <td><span class="glyphicon glyphicon-minus" style="color:grey"></span></td>
                                                 </td>
                                             {% else %}
                                                 <td><a href=" {{ url('download_firmware', { 'client': client.id}) }}" title='Download Firmware'><span class="glyphicon glyphicon-download myLink"></span></a>
 
                                                     <a href=" {{ url('save_firmware', { 'client': client.id}) }}" title='Save Firmware'><span class="glyphicon glyphicon-download-alt myLink"></span></a>
+                                                <td><span id = "imAlive{{ client.id }}" class="glyphicon glyphicon-star" style="font-size:30px;"></span></td>
                                                 </td>
                                             {% endif %}
+
+
 
                                             <td>{{ client.notes }}</td>
                                         </tr>
@@ -139,13 +144,13 @@
     <script>
 
         function spinnerON(){
-            console.log("On");
+            // console.log("Spinner On");
             document.getElementById("spinner").style.visibility = "visible";
             document.body.style.cursor = "wait";
         }
 
         function spinnerOff(){
-            console.log("Off");
+            // console.log("Spinner Off");
             document.getElementById("spinner").style.visibility = "hidden";
             document.body.style.cursor = "default";
         }
@@ -153,6 +158,75 @@
         function pageLoaded() {
             spinnerOff();
         }
+
+    </script>
+
+    <script>
+    {# Create array to loop through to get is Host Up #}
+        var hosts =[{% for client in clients %}{% if client.ipAddress  %}"{{ client.id }}",{% endif %}{% endfor %}];
+
+    // Write hosts to console for debug
+    // console.log(hosts);
+
+    $=jQuery;
+
+    // Call the script start
+
+
+    setInterval(kickStart, 20000);
+    let j = 0;
+    let soundPlayed = 0;
+
+    function kickStart(){
+
+        // console.log('Start');
+        nextHost(j);
+    }
+
+    function nextHost(i) {
+
+        var url = '/up/' + hosts[i] ;
+        // console.log('url ' + i + ' - '  + url);
+
+        $.get(url, function(response) {
+            j++;
+            // console.log(response)
+            // Change the element by id
+
+            let myColour = "green";
+            let backShade = 'inherit';
+
+            if (response != "1"){
+
+                //Play Sound
+                myColour = "white";
+                var hostDown = new Audio(  'http://192.168.12.190/audio/firewallDown.mp3' );
+
+                // Only play this once
+                if (soundPlayed == 0 ){
+                    hostDown.loop = false;
+                    hostDown.play();
+                    soundPlayed = 1;
+                }
+
+                backShade = "red";
+
+            }
+            document.getElementById("imAlive" + hosts[i]).style.color = myColour;
+            // BackGround
+            document.getElementById("hostRow" + hosts[i]).style.backgroundColor = backShade;
+
+            if (j < hosts.length){
+                nextHost(j);
+            } else {
+                j = 0;
+            }
+
+        });
+    }
+
+
+
 
     </script>
 
