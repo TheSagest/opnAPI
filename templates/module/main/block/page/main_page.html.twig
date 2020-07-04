@@ -21,7 +21,11 @@
         {{ renderBlock('App\\Module\\Main\\Block\\Widget\\ClientList') }}
     </div>
     <div>
-        {{ renderBlock('App\\Module\\Main\\Block\\Widget\\ClientList') }}
+        {% for client in clients %}
+
+            Client Name - {{ client.clientName }}
+
+        {% endfor    %}
     </div>
 
 

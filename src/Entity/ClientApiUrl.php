@@ -38,7 +38,7 @@ class ClientApiUrl
      */
     private $Notes;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
