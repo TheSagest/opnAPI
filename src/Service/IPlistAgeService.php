@@ -3,7 +3,7 @@
 namespace App\Service;
 
 
-use App\Repository\ClientQueryRepository;
+//use App\Repository\ClientQueryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\EndpointUpService;
 
@@ -20,23 +20,23 @@ class IPlistAgeService
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        ClientQueryRepository $clientQueryRepository,
+//        ClientQueryRepository $clientQueryRepository,
         EndpointUpService $endpoint
     )
     {
         $this->entityManager = $entityManager;
-        $this->clientQuery = $clientQueryRepository;
+//        $this->clientQuery = $clientQueryRepository;
         $this->endpoint = $endpoint;
     }
 
         public function setListCredentials( string $clientID, string $listName) : void
     {
-        $this->clientID = $clientID;
-        $this->listName = $listName;
-
-        $this->listArray = $this->clientQuery->findBy([
-                'clientID' => $this->clientID,
-                'IPListName' => $this->listName]);
+//        $this->clientID = $clientID;
+//        $this->listName = $listName;
+//
+//        $this->listArray = $this->clientQuery->findBy([
+//                'clientID' => $this->clientID,
+//                'IPListName' => $this->listName]);
 
     }
 
@@ -44,14 +44,14 @@ class IPlistAgeService
 
         $qb = null;
 
-        if ($this->clientID){
-            $qb = $this->clientQuery->createQueryBuilder('l');
-            $qb->select('l, MAX(l.timeQueried) as latestQuery');
-            $qb->andWhere('l.clientID = :cID' );
-            $qb->andWhere('l.IPListName = :lName');
-            $qb->setParameter('cID', $this->clientID);
-            $qb->setParameter('lName', $this->listName);
-        }
+//        if ($this->clientID){
+//            $qb = $this->clientQuery->createQueryBuilder('l');
+//            $qb->select('l, MAX(l.timeQueried) as latestQuery');
+//            $qb->andWhere('l.clientID = :cID' );
+//            $qb->andWhere('l.IPListName = :lName');
+//            $qb->setParameter('cID', $this->clientID);
+//            $qb->setParameter('lName', $this->listName);
+//        }
         return $qb->getQuery()->execute();
 
 

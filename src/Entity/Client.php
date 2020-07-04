@@ -234,10 +234,9 @@ class Client
     private $localIP;
 
     /**
-     * @ORM\OneToMany(targetEntity=ClientApiUrl::class, mappedBy="Client", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ClientApiUrl::class, mappedBy="client", orphanRemoval=true)
      */
     private $clientApiUrls;
-
 
 
     public function __construct()
@@ -348,5 +347,6 @@ class Client
 
         return $this;
     }
+
 
 }

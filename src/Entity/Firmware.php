@@ -12,8 +12,8 @@ class Firmware
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid")
      */
     private $id;
 
@@ -23,7 +23,7 @@ class Firmware
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=client::class, inversedBy="firmware")
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="firmware")
      */
     private $client;
 
@@ -32,7 +32,7 @@ class Firmware
      */
     private $content;
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }

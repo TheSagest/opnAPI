@@ -2,91 +2,74 @@
 
 namespace App\Entity;
 
+use App\Entity\ClientApiUrl;
 use App\Repository\ClientQueryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ClientQueryRepository::class)
  */
-
 class ClientQuery
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=20)
      */
-    private $IPaddress;
+    private $IPAddress;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $clientID;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $IPListName;
-
-    /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="datetime")
      */
     private $timeQueried;
 
-    public function getId(): ?int
+    /**
+     * @ORM\ManyToOne(targetEntity=ClientApiUrl::class, inversedBy="clientQueries")
+     */
+    private $clientApiUrl;
+
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getIPaddress(): ?string
+    public function getIPAddress(): ?string
     {
-        return $this->IPaddress;
+        return $this->IPAddress;
     }
 
-    public function setIPaddress(string $IPaddress): self
+    public function setIPAddress(string $IPAddress): self
     {
-        $this->IPaddress = $IPaddress;
+        $this->IPAddress = $IPAddress;
 
         return $this;
     }
 
-    public function getClientID(): ?string
-    {
-        return $this->clientID;
-    }
-
-    public function setClientID(string $clientID): self
-    {
-        $this->clientID = $clientID;
-
-        return $this;
-    }
-
-    public function getIPListName(): ?string
-    {
-        return $this->IPListName;
-    }
-
-    public function setIPListName(string $IPListName): self
-    {
-        $this->IPListName = $IPListName;
-
-        return $this;
-    }
-
-    public function getTimeQueried(): ?string
+    public function getTimeQueried(): ?\DateTimeInterface
     {
         return $this->timeQueried;
     }
 
-    public function setTimeQueried(int $timeQueried): self
+    public function setTimeQueried(\DateTimeInterface $timeQueried): self
     {
         $this->timeQueried = $timeQueried;
+
+        return $this;
+    }
+
+    public function getClientApiUrl(): ?ClientApiUrl
+    {
+        return $this->clientApiUrl;
+    }
+
+    public function setClientApiUrl(?ClientApiUrl $clientApiUrl): self
+    {
+        $this->clientApiUrl = $clientApiUrl;
 
         return $this;
     }

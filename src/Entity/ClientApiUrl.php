@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClientApiUrlRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,7 +28,7 @@ class ClientApiUrl
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="clientApiUrls")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Client;
+    private $client;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -37,6 +39,16 @@ class ClientApiUrl
      * @ORM\Column(type="text", nullable=true)
      */
     private $Notes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ClientQuery::class, mappedBy="clientApiUrl")
+     */
+    private $clientQueries;
+
+    public function __construct()
+    {
+        $this->clientQueries = new ArrayCollection();
+    }
 
     public function getId(): ?string
     {
@@ -57,12 +69,12 @@ class ClientApiUrl
 
     public function getClient(): ?Client
     {
-        return $this->Client;
+        return $this->client;
     }
 
-    public function setClient(?Client $Client): self
+    public function setClient(?Client $client): self
     {
-        $this->Client = $Client;
+        $this->client = $client;
 
         return $this;
     }
@@ -87,6 +99,37 @@ class ClientApiUrl
     public function setNotes(?string $Notes): self
     {
         $this->Notes = $Notes;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ClientQuery[]
+     */
+    public function getClientQueries(): Collection
+    {
+        return $this->clientQueries;
+    }
+
+    public function addClientQuery(ClientQuery $clientQuery): self
+    {
+        if (!$this->clientQueries->contains($clientQuery)) {
+            $this->clientQueries[] = $clientQuery;
+            $clientQuery->setClientApiUrl($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientQuery(ClientQuery $clientQuery): self
+    {
+        if ($this->clientQueries->contains($clientQuery)) {
+            $this->clientQueries->removeElement($clientQuery);
+            // set the owning side to null (unless already changed)
+            if ($clientQuery->getClientApiUrl() === $this) {
+                $clientQuery->setClientApiUrl(null);
+            }
+        }
 
         return $this;
     }

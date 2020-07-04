@@ -23,6 +23,8 @@ class RegistrationController extends AbstractController
      */
     public function index(Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $user = new User();
 
         $form = $this->createForm(UserType::class, $user);

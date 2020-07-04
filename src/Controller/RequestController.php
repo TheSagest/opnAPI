@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\ClientApiUrl;
+use App\Entity\ClientQuery;
 use App\Entity\Firmware;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,10 +39,27 @@ class RequestController extends \Symfony\Bundle\FrameworkBundle\Controller\Abstr
      */
     public function api(ClientApiUrl $clientApiUrl)
     {
+
+        // Update latest Queried Time
+        $em = $this->getDoctrine()->getManager();
+        $q = $em->getRepository(ClientQuery::class);
+        $result = $q->findOneBy(['clientApiUrl' => $clientApiUrl->getId()]);
+
+
+        if (!$result){
+            $result = new ClientQuery();
+            $result->setClientApiUrl($clientApiUrl);
+        }
+
+        $result->setIPAddress($this->request->getClientIp());
+        $result->setTimeQueried( new \DateTime());
+        $this->em->persist($result);
+        $this->em->flush();
+
         // Generate response
         $response = new Response();
 
-//        Get the Client API list
+        // Get the Client API list
         $ipList = $this->getDoctrine()->getManager()->getRepository(ClientApiUrl::class)->findOneBy(['id' => $clientApiUrl->getId()]);
 
         if (!$ipList){
