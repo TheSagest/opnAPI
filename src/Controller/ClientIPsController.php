@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\ClientApiUrl;
 use App\Form\ClientUrlApiType;
+use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,9 +32,20 @@ class ClientIPsController extends AbstractController
 
 
 
+        if ( strcmp( $client->getClientName(), '_globalBlock')){
+                $global = $this->getDoctrine()->getRepository(Client::class)->findOneBy(['clientName' => '_globalBlock']);
+//            dd($global);
+        } else {
+                $global = $this->getDoctrine()->getRepository(Client::class)->findOneBy(['clientName' => 'zzzx']);
+//            dd($global);
+        }
+
+
+
         return $this->render('ips/listIPs.html.twig', [
             'client' => $client,
-            'thisHost' => $request->getSchemeAndHttpHost()
+            'thisHost' => $request->getSchemeAndHttpHost(),
+            'global' => $global
         ]);
     }
 

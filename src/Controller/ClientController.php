@@ -24,7 +24,7 @@ class ClientController extends AbstractController
     private $opnsense;
     private $firewallAlias;
     private $OStatusService;
-    private $idleURLs;
+
 
     public function __construct(EntityManagerInterface $entityManager,
                                 OpnSenseFWStatusAPI $sense,
@@ -32,13 +32,13 @@ class ClientController extends AbstractController
                                 OpnSenseStatusService $OStatusService,
                                 ClientRepository $clientRepository
 
+
      )
     {
         $this->entityManager = $entityManager;
         $this->opnsense = $sense;
         $this->firewallAlias = $firewallAlias;
         $this->OStatusService = $OStatusService;
-        $this->idleURLs = $clientRepository;
 
     }
 
@@ -82,8 +82,8 @@ class ClientController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository(Client::class)->findAll();
-//        $idleURLs = $this->idleURLs->idleURLs();
+        $client = $em->getRepository(Client::class)->findBy([],['clientName' => 'ASC']);
+//        $idleURLs = $this->client->idleURLs();
 
 
 

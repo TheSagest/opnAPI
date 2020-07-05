@@ -62,7 +62,7 @@ class RequestController extends \Symfony\Bundle\FrameworkBundle\Controller\Abstr
         $file = fopen('php://memory', 'rw+');
 
         fputs( $file , "; Created by Sage Link monitor API on " .date('d-m-Y-Hi'). "  \r");
-        fputs( $file , 'hello' );
+        fputs( $file , "; hello there boy cracky \r" );
         fputs($file, $ipList->getIpAddressList());
 
         rewind($file);
@@ -134,6 +134,7 @@ class RequestController extends \Symfony\Bundle\FrameworkBundle\Controller\Abstr
         $firmwareFile->setName($name);
         $firmwareFile->setContent($content);
         $this->em->persist($firmwareFile);
+
         $this->em->flush();
 
         return $this->redirectToRoute('list_clients');

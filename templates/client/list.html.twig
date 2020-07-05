@@ -115,10 +115,12 @@
                                 {%  endfor %}
                             </table>
 
-                            <div class="card-header">
-                                <a href="{{ path('create_client') }}" >NEW Client</a>
+
+                            <div class="form_group col-md-12 mb-3">
+                                <a class="btn btn-primary" href="{{ path('create_client') }}" role="button">NEW Client</a>
                             </div>
-                        {% endif %}
+
+{                       {% endif %}
 
                         {% if app.user == null %}
                             <a href="{{ path('app_login') }}" class="btn btn-info">Please login </a>

@@ -54,8 +54,7 @@
                                         <td>{{ ips.uRLName }} </td>
                                         <td>{{ ips.ipAddressList|nl2br }}</td>
 
-                                        {# Get the difference in days from last query and now #}
-                                        {% set difference = date().diff(ips.dateQueried) %}
+                                        {% set difference = date().diff(ips.dateQueried | default  ) %}
                                         {% if difference.days < 2 %}
                                             <td><span class="glyphicon glyphicon-ok " style="color: green"></span> </td>
                                         {% else %}
@@ -64,7 +63,7 @@
 
                                         <td><a href=" {{ url('edit_client_ip', { 'clientApiUrl': ips.id }) }}">Edit</a></td>
                                         <td><a href=" {{ url('delete_client_ip', { 'clientApiUrl': ips.id }) }}">Delete</a></td>
-                                        <td><input type="text" style = " font-size: 12px; " size = '85' value="{{ thisHost }}/api/{{ ips.id }}" id="myInput{{ loop.index}} " ></td>
+                                        <td><input type="text" style = "font-size: 12px; " size = '85' value="{{ thisHost }}/api/{{ ips.id }}" id="myInput{{ loop.index}} " ></td>
 {#                                        <td><a class="btn btn-primary" href="http://localhost/api/{{ ips.id }}" target="_blank">Test</a></td>#}
                                         <td><a class="btn btn-primary" href="/api/{{ ips.id }}" target="_blank">Test</a></td>
                                     </tr>
@@ -74,25 +73,37 @@
                                 <h4>Global</h4>
                             <table class="table">
                                 <tr>
-                                    <th>List Name.</th>
-                                    <th>IP Addresses.</th>
+                                    <th>Name.</th>
+                                    <th>IP.</th>
+                                    <th>Idle</th>
                                     <th>Edit.</th>
                                     <th>Delete.</th>
                                     <th>OPNsense URL.</th>
                                     <th>Test</th>
                                 </tr>
-{#                                {%  for ips in global.iPLists %}#}
+                                {%  if global is not null and global is not empty %}
+                                    {%  for ips in global.clientApiUrls %}
 
-{#                                    <tr>#}
-{#                                        <td>{{ ips.ListType }} </td>#}
-{#                                        <td>{{ ips.IPList|nl2br }}</td>#}
-{#                                        <td><a href=" {{ url('edit_client_ip', { 'IPList': ips.id }) }}">Edit</a></td>#}
-{#                                        <td><a href=" {{ url('delete_client_ip', { 'IPList': ips.id }) }}">Delete</a></td>#}
-{#                                        <td><input type="text" { font-size: 12px; } size = '85' value="https://api.sagelink.com.au/api/{{ global.id }}/{{ ips.ListType }}" id="myInput{{ loop.index}} " ></td>#}
-{#                                        <td><a class="btn btn-primary" href="https://api.sagelink.com.au/api/{{ global.id }}/{{ ips.ListType }}" target="_blank">Test</a></td>#}
-{#                                    </tr>#}
+                                        <tr>
+                                            <td>{{ ips.uRLName }} </td>
+                                            <td>{{ ips.ipAddressList|nl2br }}</td>
 
-{#                                {%  endfor %}#}
+                                            {% set difference = date().diff(ips.dateQueried | default  ) %}
+                                            {% if difference.days < 2 %}
+                                                <td><span class="glyphicon glyphicon-ok " style="color: green"></span> </td>
+                                            {% else %}
+                                                <td><span class="glyphicon glyphicon-remove " style="color: red"></span></td>
+                                            {% endif %}
+
+                                            <td><a href=" {{ url('edit_client_ip', { 'clientApiUrl': ips.id }) }}">Edit</a></td>
+                                            <td><a href=" {{ url('delete_client_ip', { 'clientApiUrl': ips.id }) }}">Delete</a></td>
+                                            <td><input type="text" style = "font-size: 12px; " size = '85' value="{{ thisHost }}/api/{{ ips.id }}" id="myInput{{ loop.index}} " ></td>
+                                            {#                                        <td><a class="btn btn-primary" href="http://localhost/api/{{ ips.id }}" target="_blank">Test</a></td>#}
+                                            <td><a class="btn btn-primary" href="/api/{{ ips.id }}" target="_blank">Test</a></td>
+                                        </tr>
+
+                                    {%  endfor %}
+                                {% endif %}
 
                             </table>
 
