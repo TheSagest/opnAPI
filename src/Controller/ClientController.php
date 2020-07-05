@@ -6,6 +6,7 @@ use App\Entity\Client;
 use App\Form\ClientType;
 
 use App\Module\RemoteAPI\FirewallAlias;
+use App\Repository\ClientRepository;
 use App\Service\OpnSenseFWStatusAPI;
 use App\Service\OpnSenseStatusService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,18 +24,21 @@ class ClientController extends AbstractController
     private $opnsense;
     private $firewallAlias;
     private $OStatusService;
+    private $idleURLs;
 
     public function __construct(EntityManagerInterface $entityManager,
                                 OpnSenseFWStatusAPI $sense,
                                 FirewallAlias $firewallAlias,
-                                OpnSenseStatusService $OStatusService
+                                OpnSenseStatusService $OStatusService,
+                                ClientRepository $clientRepository
 
-    )
+     )
     {
         $this->entityManager = $entityManager;
         $this->opnsense = $sense;
         $this->firewallAlias = $firewallAlias;
         $this->OStatusService = $OStatusService;
+        $this->idleURLs = $clientRepository;
 
     }
 
@@ -79,9 +83,13 @@ class ClientController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         $client = $em->getRepository(Client::class)->findAll();
+//        $idleURLs = $this->idleURLs->idleURLs();
+
+
 
         return $this->render('client/list.html.twig', [
             'clients' => $client,
+//            'idleURLs' => $idleURLs,
         ]);
     }
 

@@ -19,6 +19,16 @@ class ClientApiUrlRepository extends ServiceEntityRepository
         parent::__construct($registry, ClientApiUrl::class);
     }
 
-
+//    public function numberOfDaysUnqueried(){
+//
+//        return
+//            $this
+//                ->createQueryBuilder('api')
+//                ->select('COUNT(api.dateQueried) AS api')
+//                ->andWhere(api.dateQueried < DATE_SUB(now(), 2) )
+//                ->getQuery()
+//                ->getResult(Query::HYDRATE_SCALAR);
+//
+//    }
 
 }

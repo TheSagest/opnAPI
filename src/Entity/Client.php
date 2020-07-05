@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -348,5 +349,16 @@ class Client
         return $this;
     }
 
+    public function idleURLs() : int {
+
+        $date =new \DateTime();
+        $date->sub(new \DateInterval('P2D'));
+
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr() ->lt('dateQueried', $date))
+
+            ;
+        return count($this->clientApiUrls->matching($criteria));
+    }
 
 }

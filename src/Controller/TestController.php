@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 
-use App\Entity\Test;
-
 use App\Module\Block\Service\BlockService;
 use App\Module\Main\Block\Page\MainPage;
 use App\Repository\ClientRepository;
@@ -65,15 +63,7 @@ class TestController extends AbstractController
         return $response;
     }
 
-    /**
-     * @Route("/api/{test}", name="test")
-     * @return Response
-     */
-    public function testX(Test $test ){
 
-        $test->setLastAccessed(new \DateTime());
-        $this->getDoctrine()->getManager()->flush();
-    }
 
     /**
      * @Route("/main")

@@ -5,10 +5,11 @@
 {% block body %}
     <div class="container">
         <div class="row">
-            <div class="col-md-10 ml-md-auto">
+            <div class="col-md-10 ">
                 <div class="card bg-light mb-3 mt-5" style="width: 800px">
                     <div class="card-body">
-                        <div class="card-header mb-3">EDIT IP list for {{ clientApiUrl.client.clientName }}</div>
+
+                        <div class="card-header mb-3"><h1>EDIT IP list for {{ clientApiUrl.client.clientName }}</h1></div>
                         {% if app.user != null %}
                             {{ form_start(form) }}
                             <div class="form_group">
@@ -20,7 +21,7 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-8 col-md-offset-4" style="margin-top:5px;">
+                                <div class="col-md-8 " style="margin-top:5px;">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fa fa-btn fa-user"></i>Update
                                     </button>
@@ -29,7 +30,8 @@
                                 </div>
                             </div>
                             {{ form_end(form) }}
-			 <div class="form_group col-md-12 mb-3">
+			            <div class="form_group col-md-12 mb-3">
+                            <br>
                             <a class="btn btn-primary" href="{{ path('list_clients') }}" role="button">Back</a>
                          </div>
                         {% endif %}

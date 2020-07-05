@@ -33,6 +33,7 @@ class ClientIPsController extends AbstractController
 
         return $this->render('ips/listIPs.html.twig', [
             'client' => $client,
+            'thisHost' => $request->getSchemeAndHttpHost()
         ]);
     }
 
