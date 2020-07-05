@@ -41,19 +41,10 @@ class RequestController extends \Symfony\Bundle\FrameworkBundle\Controller\Abstr
     {
 
         // Update latest Queried Time
-        $em = $this->getDoctrine()->getManager();
-        $q = $em->getRepository(ClientQuery::class);
-        $result = $q->findOneBy(['clientApiUrl' => $clientApiUrl->getId()]);
 
-
-        if (!$result){
-            $result = new ClientQuery();
-            $result->setClientApiUrl($clientApiUrl);
-        }
-
-        $result->setIPAddress($this->request->getClientIp());
-        $result->setTimeQueried( new \DateTime());
-        $this->em->persist($result);
+        $clientApiUrl->setQueryFromIPaddress($this->request->getClientIp());
+        $clientApiUrl ->setDateQueried( new \DateTime());
+        $this->em->persist($clientApiUrl);
         $this->em->flush();
 
         // Generate response

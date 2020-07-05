@@ -29,7 +29,9 @@ class ClientType extends AbstractType
                 'required' => false
             ])
             ->add('https')
-            ->add('localIP', TextType::class)
+            ->add('localIP', TextType::class, [
+            'label' => 'Local IP'
+            ])
             ->add('apiKey' , TextType::class, [
                 'required' => false
             ])

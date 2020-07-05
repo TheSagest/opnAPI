@@ -101,7 +101,7 @@ abstract class BaseCommand
 
         } catch (\GuzzleHttp\Exception\GuzzleException $e){
 
-
+            dd($e);
         }
 
 

@@ -40,15 +40,15 @@ class ClientApiUrl
      */
     private $Notes;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ClientQuery::class, mappedBy="clientApiUrl")
+        /**
+     * @ORM\Column(type="string", length=20, nullable=true)
      */
-    private $clientQueries;
+    private $queryFromIPaddress;
 
-    public function __construct()
-    {
-        $this->clientQueries = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateQueried;
 
     public function getId(): ?string
     {
@@ -103,33 +103,30 @@ class ClientApiUrl
         return $this;
     }
 
-    /**
-     * @return Collection|ClientQuery[]
-     */
-    public function getClientQueries(): Collection
+
+
+
+
+    public function getQueryFromIPaddress(): ?string
     {
-        return $this->clientQueries;
+        return $this->queryFromIPaddress;
     }
 
-    public function addClientQuery(ClientQuery $clientQuery): self
+    public function setQueryFromIPaddress(string $queryFromIPaddress): self
     {
-        if (!$this->clientQueries->contains($clientQuery)) {
-            $this->clientQueries[] = $clientQuery;
-            $clientQuery->setClientApiUrl($this);
-        }
+        $this->queryFromIPaddress = $queryFromIPaddress;
 
         return $this;
     }
 
-    public function removeClientQuery(ClientQuery $clientQuery): self
+    public function getDateQueried(): ?\DateTimeInterface
     {
-        if ($this->clientQueries->contains($clientQuery)) {
-            $this->clientQueries->removeElement($clientQuery);
-            // set the owning side to null (unless already changed)
-            if ($clientQuery->getClientApiUrl() === $this) {
-                $clientQuery->setClientApiUrl(null);
-            }
-        }
+        return $this->dateQueried;
+    }
+
+    public function setDateQueried(\DateTimeInterface $dateQueried): self
+    {
+        $this->dateQueried = $dateQueried;
 
         return $this;
     }
