@@ -64,7 +64,7 @@
 
                                         <td><a href=" {{ url('edit_client_ip', { 'clientApiUrl': ips.id }) }}">Edit</a></td>
                                         <td><a href=" {{ url('delete_client_ip', { 'clientApiUrl': ips.id }) }}">Delete</a></td>
-                                        <td><input type="text" { font-size: 12px; } size = '85' value="{{ thisHost }}/api/{{ ips.id }}" id="myInput{{ loop.index}} " ></td>
+                                        <td><input type="text" style = " font-size: 12px; " size = '85' value="{{ thisHost }}/api/{{ ips.id }}" id="myInput{{ loop.index}} " ></td>
 {#                                        <td><a class="btn btn-primary" href="http://localhost/api/{{ ips.id }}" target="_blank">Test</a></td>#}
                                         <td><a class="btn btn-primary" href="/api/{{ ips.id }}" target="_blank">Test</a></td>
                                     </tr>
