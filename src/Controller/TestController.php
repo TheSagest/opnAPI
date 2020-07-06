@@ -9,24 +9,19 @@ use App\Repository\ClientRepository;
 use App\Service\EndpointUpService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-use App\Service\IPlistAgeService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TestController extends AbstractController
 {
-    private $mylist;
     private $endPoint;
     private $block;
     private $clientRepository;
 
     public function __construct(
-        IPlistAgeService $IPlistAgeService,
         EndpointUpService $endPoint,
         BlockService $block,
         ClientRepository $clientRepository)
     {
-        $this->mylist = $IPlistAgeService;
         $this->endPoint = $endPoint;
         $this->block = $block;
         $this->clientRepository = $clientRepository;

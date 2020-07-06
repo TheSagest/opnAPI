@@ -29,35 +29,41 @@ class OpnSenseStatusService
         $this->em = $em;
     }
 
-    public function updateFirmwareVersion()
+    // Loop through ALL clients and update Alias an dsFirmware Versions
+    // Called from Command on a CRON job.
+    // Use refreshClientFirewallStatus or persistFirmweareData for individual Clients
+    public function refreshAllFirewallStatus()
     {
-        // Loop through Each client and update the Vs, and the date checked.
+        // Loop through Each client and update the Firmware Vs, Firewall Status.
         $clients = $this->clients->scanClients();
 
-        foreach ($clients as $client){
-//            dump($client->getClientName() );
-            $this->persistFirmwareData($client);
-            $this->persistAliasStatus($client);
-
+        foreach ($clients as $client) {
+            dump ($client->getClientName());
+            $this->refreshClientFirewallStatus($client);
         }
     }
 
+    // Call to update both Firmware Version and Firewall status
+    public function refreshClientFirewallStatus(Client $client)
+    {
+            $this->persistFirmwareData($client);
+            $this->persistAliasStatus($client);
+    }
+
+    // Save Firmware Version to Database
     public function persistFirmwareData(Client $client){
 
         $this->setFirmwareHeaders($client);
 
-
-        $firmwareStatusResponse = $this->opnStatus->firmware()->status();
-        dump(' Firmware Vs.');
-        $client->setProductVersion( $firmwareStatusResponse->getProductVersion());
-
+        $firmwareStatusResponse = $this->opnStatus->firmware()->info() ;
+        $client->setProductVersion( $firmwareStatusResponse-> getVersion());
         $this->em->flush();
     }
 
+    // Save Alias state to Database
     public function persistAliasStatus(Client $client){
 
         $this->setAliasHeaders($client);
-
 
         $firmwareStatusResponse = $this->firewallAlias->getAliasUUID($client->getLocalNetworkAliasName())->uuid;
 
@@ -68,51 +74,15 @@ class OpnSenseStatusService
         } else {
             $result= 'On';
         }
-        dump(' Alias Status.');
+//        dump(' Alias Status.');
         $client->setFirewallOn($result);
 
         $this->em->flush();
     }
 
-    public function getLocalNetworkAliasStatus(){
-
-        $myClient = [];
-
-        $clients = $this->clients->findAll();
-
-
-        foreach ($clients as $client){
-
-            $myRow = [];
-            $myRow['id'] = $client->getId();
-            $myRow['name'] = $client->getClientName();
-
-            $myRow ['firmwareVs'] = $client->getProductVersion();
-
-            if ($client->getScanForUp()){
-                $myRow['aliasEnabled'] = $this->getAliasStatus($client);
-            }else{
-                $myRow['aliasEnabled'] = 'N/A';
-            }
-
-
-            $myRow['notes'] = $client->getNotes();
-
-            array_push($myClient,  $myRow);
-
-        }
-
-        return $myClient ;
-
-    }
-
-    private function getAliasStatus(Client $client){
-        $this->setFirmwareHeaders($client);
-        return $this->firewallAlias->aliasEnabled($client->getLocalNetworkAliasName());
-    }
-
+    // Common function to set headers for for API call
     public function setFirmwareHeaders($client){
-        // Common function to set headers for for API call
+
 
         $this->opnStatus->setHost($client->getIpAddress());
         $this->opnStatus->setKey($client->getApiKey());
@@ -127,8 +97,9 @@ class OpnSenseStatusService
 
     }
 
+    // Common function to set headers for for API call
     protected function setAliasHeaders($client){
-        // Common function to set headers for for API call
+
 
         $this->firewallAlias->setHost($client->getIpAddress());
         $this->firewallAlias->setKey($client->getApiKey());
@@ -143,9 +114,4 @@ class OpnSenseStatusService
 
     }
 
-    public function downloadFirmware(Client $client){
-        $this->setFirmwareHeaders($client);
-
-
-    }
 }
