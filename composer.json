@@ -34,7 +34,9 @@
         "symfony/uid": "5.1.*",
         "symfony/validator": "5.1.*",
         "symfony/web-link": "5.1.*",
-        "symfony/yaml": "5.1.*"
+        "symfony/yaml": "5.1.*",
+        "twig/intl-extra": "^3.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

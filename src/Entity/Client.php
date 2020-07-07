@@ -18,6 +18,7 @@ class Client
         return $this->getClientName();
     }
 
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
@@ -54,7 +55,7 @@ class Client
     /**
      * @ORM\Column(type="string", length=25)
      */
-    private $firewallOn = 'n/a';
+    private $firewallOn = 'On';
 
     /**
      * @ORM\Column(type="integer")
@@ -244,6 +245,9 @@ class Client
     {
         $this->firmware = new ArrayCollection();
         $this->clientApiUrls = new ArrayCollection();
+        $this-> setFirewallOn( 'On');
+        $this->productVersion = '10.0';
+        $this->firewallOn = 'On';
     }
 
     public function getId()

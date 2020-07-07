@@ -2,6 +2,7 @@
 
 namespace App\Module\RemoteAPI;
 
+use App\Module\APIObject\FirmwareInfoResponse;
 use App\Module\APIObject\FirmwareStatusResponse;
 
 class Firmware extends BaseCommand
@@ -73,11 +74,13 @@ class Firmware extends BaseCommand
         return $this->post();
     }
 
-    public function info()
+    public function info() : FirmwareInfoResponse
     {
         $this->command = 'info';
+        $response = $this->get();
 
-        return $this->get();
+        return new \App\Module\APIObject\FirmwareInfoResponse($response);
+
     }
     public function upgradestatus()
     {

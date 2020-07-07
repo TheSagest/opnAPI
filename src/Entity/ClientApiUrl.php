@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ClientApiUrl
 {
+    public function __construct()
+    {
+        $this->dateQueried = new \DateTime('1/1/1990');
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")

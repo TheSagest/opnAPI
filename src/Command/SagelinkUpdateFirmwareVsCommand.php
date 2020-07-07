@@ -27,7 +27,7 @@ class SagelinkUpdateFirmwareVsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('Writing Data');
-        $this->opnStatus->updateFirmwareVersion();
+        $this->opnStatus->refreshAllFirewallStatus();
         $output->writeln('Finished');
 
         return 0;

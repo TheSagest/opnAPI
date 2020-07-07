@@ -10,7 +10,6 @@
     </style>
 {% endblock %}
 
-
 {% block body %}
 
     <div class="container">
@@ -35,13 +34,12 @@
                             </h1>
                         </div>
 
-
-
                         {% if app.user != null %}
                             <table class="table">
                                 <tr>
                                     <th>Client Name.</th>
                                     <th>API </br>URLs.</th>
+                                    <th>Reload.</th>
                                     <th>IP / Hostname</th>
                                     <th>Versions.</th>
                                     <th>Firewall<br>Status</th>
@@ -68,6 +66,14 @@
                                                     </a>
                                                 </td>
                                             {% endif %}
+                                            <td>
+                                                {% if client.firewallOn == 'n/a' %}
+                                                    -
+                                                {% else %}
+                                                    <a href=" {{ url('refresh_aliases', { 'client': client.id}) }} "> <span onclick="spinnerON()" class = "glyphicon glyphicon-refresh " style="color: green"></span> </a>
+
+                                                {% endif%}
+                                            </td>
                                             <td>{{ client.localIP }}</td>
                                             <td>
                                                 {% if client.firewallOn == 'n/a' %}
@@ -107,17 +113,16 @@
                                                 </td>
                                             {% endif %}
 
-
-
                                             <td>{{ client.notes }}</td>
                                         </tr>
 
                                 {%  endfor %}
                             </table>
 
-                            <div class="card-header">
-                                <a href="{{ path('create_client') }}" >NEW Client</a>
+                            <div class="form_group col-md-12 mb-3">
+                                <a class="btn btn-primary" href="{{ path('create_client') }}" role="button">NEW Client</a>
                             </div>
+
                         {% endif %}
 
                         {% if app.user == null %}
@@ -142,7 +147,6 @@
             message = message + "#################\n\n"
             message = message + "REALLY Delete?";
             message = message + "\n";
-
 
             var r = confirm(message);
             if (r === true) {

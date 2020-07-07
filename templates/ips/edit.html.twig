@@ -9,7 +9,7 @@
                 <div class="card bg-light mb-3 mt-5" style="width: 800px">
                     <div class="card-body">
 
-                        <div class="card-header mb-3"><h1>EDIT IP list for {{ clientApiUrl.client.clientName }}</h1></div>
+                        <div class="card-header mb-3"><h1>Edit IP list for {{ clientApiUrl.client.clientName }}</h1></div>
                         {% if app.user != null %}
                             {{ form_start(form) }}
                             <div class="form_group">
@@ -32,8 +32,8 @@
                             {{ form_end(form) }}
 			            <div class="form_group col-md-12 mb-3">
                             <br>
-                            <a class="btn btn-primary" href="{{ path('list_clients') }}" role="button">Back</a>
-                         </div>
+                            <a class="btn btn-primary" href="{{ path('list_client_ips',{ 'client' :  clientApiUrl.client.id }) }}" role="button">Back</a>
+                        </div>
                         {% endif %}
                         {% if app.user == null %}
                             <a href="{{ path('app_login') }}" class="btn btn-info">Please Login</a>

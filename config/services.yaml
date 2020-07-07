@@ -33,3 +33,6 @@ services:
     App\Module\Main\Block\:
         resource: '../src/Module/Main/Block'
         public: true
+
+    Psr\Container\ContainerInterface:
+        alias: "service_container"

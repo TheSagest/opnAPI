@@ -8,12 +8,14 @@ class BlockService
     protected $authorizationChecker;
     protected $eventDispatcher;
     protected $environment;
+    protected $temp;
 
     public function __construct(
-        \Psr\Container\ContainerInterface $container,
+        \Psr\Container\ContainerInterface  $container,
         \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker,
         \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher,
         \Twig\Environment $environment
+//        \Symfony\Component\DependencyInjection\ContainerInterface $container
     )
     {
         $this->container = $container;
