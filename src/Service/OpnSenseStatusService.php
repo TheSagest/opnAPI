@@ -114,4 +114,11 @@ class OpnSenseStatusService
 
     }
 
+    // Refresh Aliases for Client
+    public function refreshAliases(Client $client){
+        //  api/firewall/alias/reconfigure
+
+        $this->setAliasHeaders($client);
+        $firmwareStatusResponse = $this->firewallAlias->reconfigure();
+    }
 }

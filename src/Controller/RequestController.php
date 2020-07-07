@@ -61,8 +61,13 @@ class RequestController extends \Symfony\Bundle\FrameworkBundle\Controller\Abstr
         // Create the TEMP File
         $file = fopen('php://memory', 'rw+');
 
-        fputs( $file , "; Created by Sage Link monitor API on " .date('d-m-Y-Hi'). "  \r");
-        fputs( $file , "; hello there boy cracky \r" );
+        // Need to add CR LF to end of line (Windows only ??)
+        // Wont matter anyway, just be a blank line
+
+        //Headings
+        fputs( $file , "; Created by Sage Link monitor API on " .date('d-m-Y-Hi'). "  \r\n");
+        fputs( $file , "; Hello there Boy Cracky! \r\n" );
+        // The list of IPs
         fputs($file, $ipList->getIpAddressList());
 
         rewind($file);
@@ -71,7 +76,7 @@ class RequestController extends \Symfony\Bundle\FrameworkBundle\Controller\Abstr
         // Set headers
         $response->headers->set('Cache-Control', 'private');
         $response->headers->set('Content-type', 'text/plain' );
-        $response->headers->set('Content-Disposition', 'attachment; filename="file.txt";');
+        $response->headers->set('Content-Disposition', 'attachment; filename="drop.txt";');
         $response->headers->set('Content-length',  strlen($content));
 
         $response->setcontent( $content );
@@ -148,7 +153,6 @@ class RequestController extends \Symfony\Bundle\FrameworkBundle\Controller\Abstr
     public function downloadFirmware (Firmware $firmware){
         $response = new Response();
         $em =  $this->getDoctrine()->getRepository(Firmware::class)->find($firmware);
-
         $content = $em->getContent();
 
 // Set headers

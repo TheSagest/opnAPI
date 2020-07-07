@@ -216,4 +216,12 @@ class ClientController extends AbstractController
 
         return $this->redirectToRoute('list_clients');
     }
+
+    /**
+     * @Route("/refreshAliases/{client}", name="refresh_aliases")
+     */
+    public function refreshAliases(Client $client){
+        $this->OStatusService->refreshAliases($client);
+        return $this->redirectToRoute('list_clients');
+    }
 }

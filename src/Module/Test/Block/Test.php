@@ -12,6 +12,8 @@ class Test extends AbstractBlock
 {
     private $content;
 
+
+
     public function getContent(){
 
         return 'Test';
